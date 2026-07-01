@@ -90,5 +90,48 @@ export const fallbackMetaDecks: MetaDeck[] = [
       { name: 'Noctowl (SCR 115)', count: 3 }
     ],
     rawList: `Pokémon: 16\n3 Dreepy TWM 128\n3 Drakloak TWM 129\n3 Dragapult ex TWM 130\n3 Hoothoot SCR 114\n3 Noctowl SCR 115\n1 Fezandipiti ex TWM 96\n\nTrainer: 32\n4 Professor's Research SV8a 118\n4 Lacey SSP 185\n2 Boss's Orders SV8a 121\n4 Buddy-Buddy Poffin TEF 144\n4 Nest Ball SV8a 123\n4 Ultra Ball SV8a 124\n4 Rare Candy SV8a 125\n2 Super Rod SV8a 126\n1 Prime Catcher TEF 157\n3 Area Zero Underdepths SCR 131\n\nEnergy: 12\n8 Basic Psychic Energy SVE 13\n4 Basic Fire Energy SVE 2`
+  },
+  {
+    name: 'Charizard ex',
+    archetype: 'Charizard ex / Pidgeot ex / Dusknoir (H-On)',
+    share: 15.0,
+    winRate: 53.0,
+    imageUrl: 'https://images.pokemontcg.io/sv8a/34.png',
+    updatedAt: '2026-06-30',
+    description: 'O clássico e resiliente Charizard ex. Seu ataque Burning Darkness causa 180 de dano mais 30 para cada prêmio que o oponente comprou. É acelerado pela sua habilidade Infernal Reign ao evoluir, e auxiliado pela habilidade Quick Search de Pidgeot ex e Cursed Blast do Dusknoir.',
+    cards: [
+      { name: 'Charizard ex (SV8a 034)', count: 3 },
+      { name: 'Pidgeot ex (SV8a 094)', count: 2 },
+      { name: 'Dusknoir (SFA 020)', count: 2 }
+    ],
+    rawList: `Pokémon: 19\n3 Charmander SSP 31\n1 Charmeleon SSP 32\n3 Charizard ex SV8a 34\n2 Pidgey SV8a 92\n2 Pidgeot ex SV8a 94\n2 Duskull SFA 18\n1 Dusclops SFA 19\n2 Dusknoir SFA 20\n1 Fezandipiti ex TWM 96\n2 Teal Mask Ogerpon ex TWM 25\n\nTrainer: 31\n4 Professor's Research SV8a 118\n3 Lacey SSP 185\n2 Boss's Orders SV8a 121\n4 Buddy-Buddy Poffin TEF 144\n4 Nest Ball SV8a 123\n4 Ultra Ball SV8a 124\n4 Rare Candy SV8a 125\n2 Super Rod SV8a 126\n1 Prime Catcher TEF 157\n3 Area Zero Underdepths SCR 131\n\nEnergy: 10\n6 Basic Fire Energy SVE 2\n4 Basic Grass Energy SVE 1`
+  },
+  {
+    name: 'Gouging Fire ex',
+    archetype: 'Gouging Fire ex / Teal Mask Ogerpon (H-On)',
+    share: 9.8,
+    winRate: 50.5,
+    imageUrl: 'https://images.pokemontcg.io/sv5/38.png',
+    updatedAt: '2026-06-30',
+    description: 'Um deck focado em dano explosivo logo no turno 1 ou 2. Gouging Fire ex (TEF 038) bate 260 de dano massivo com Blaze Blitz, que é recarregado facilmente através da habilidade Teal Dance do Teal Mask Ogerpon ex e cartas de Energy Switch.',
+    cards: [
+      { name: 'Gouging Fire ex (TEF 038)', count: 3 },
+      { name: 'Teal Mask Ogerpon ex (TWM 025)', count: 3 }
+    ],
+    rawList: `Pokémon: 12\n3 Gouging Fire ex TEF 38\n3 Teal Mask Ogerpon ex TWM 25\n1 Fezandipiti ex TWM 96\n1 Squawkabilly ex SV8a 102\n2 Hoothoot SCR 114\n2 Noctowl SCR 115\n\nTrainer: 36\n4 Professor's Research SV8a 118\n4 Lacey SSP 185\n2 Boss's Orders SV8a 121\n4 Nest Ball SV8a 123\n4 Ultra Ball SV8a 124\n4 Earthen Vessel SV8a 122\n4 Energy Switch SV8a 129\n2 Bravery Charm SV8a 130\n2 Super Rod SV8a 126\n2 Night Stretcher SFA 61\n1 Prime Catcher TEF 157\n3 Hearthflame Mask Ogerpon ex TWM 40\n\nEnergy: 12\n6 Basic Fire Energy SVE 2\n6 Basic Grass Energy SVE 1`
+  },
+  {
+    name: 'Future Hands',
+    archetype: 'Iron Hands ex / Iron Crown ex (H-On)',
+    share: 11.2,
+    winRate: 51.5,
+    imageUrl: 'https://images.pokemontcg.io/sv5/61.png',
+    updatedAt: '2026-06-30',
+    description: 'O deck agressivo "Future" de maior sucesso. Iron Hands ex (TEF 061) usa Amp You Very Much para nocautear Pokémons pequenos do oponente e comprar um prêmio extra, amplificado pelo bônus de dano de Iron Crown ex (TEF 081) e aceleradores elétricos.',
+    cards: [
+      { name: 'Iron Hands ex (TEF 061)', count: 3 },
+      { name: 'Iron Crown ex (TEF 081)', count: 3 }
+    ],
+    rawList: `Pokémon: 14\n3 Iron Hands ex TEF 61\n3 Iron Crown ex TEF 81\n2 Miraidon TEF 121\n2 Iron Valiant ex TEF 80\n2 Hoothoot SCR 114\n2 Noctowl SCR 115\n\nTrainer: 34\n4 Professor's Research SV8a 118\n4 Lacey SSP 185\n2 Boss's Orders SV8a 121\n4 Future Booster Energy Capsule TEF 149\n4 Techno Radar TEF 156\n4 Nest Ball SV8a 123\n4 Ultra Ball SV8a 124\n2 Super Rod SV8a 126\n2 Electric Generator SV8a 131\n1 Prime Catcher TEF 157\n3 Pokestop SV8a 128\n\nEnergy: 12\n8 Basic Lightning Energy SVE 4\n4 Basic Psychic Energy SVE 13`
   }
 ];

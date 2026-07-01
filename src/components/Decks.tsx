@@ -160,14 +160,12 @@ export default function Decks({ currentMember }: DecksProps) {
   // Load Limitless meta decks from backend API with fallback
   useEffect(() => {
     async function loadMetaDecks() {
-      if (activeTab !== 'meta') return;
       try {
         setLoadingMeta(true);
         
         const isStaticHosting = window.location.hostname.includes('github.io') || 
                                 (!window.location.hostname.includes('localhost') && !window.location.hostname.includes('run.app'));
         
-        // Em produção (GitHub Pages) pula a API e usa dados locais
         if (isStaticHosting) {
           const sortedFallback = [...fallbackMetaDecks].sort((a: any, b: any) => {
             const dateA = a.updatedAt || '2023-01-01';
@@ -185,14 +183,7 @@ export default function Decks({ currentMember }: DecksProps) {
           const data = await res.json();
           const decksList = data.decks || (Array.isArray(data) ? data : []);
           const tName = data.tournamentName || 'Standard format meta';
-          
-          const sorted = decksList.sort((a: any, b: any) => {
-            const dateA = a.updatedAt || '2023-01-01';
-            const dateB = b.updatedAt || '2023-01-01';
-            if (dateB !== dateA) return dateB.localeCompare(dateA);
-            return b.share - a.share;
-          });
-          setMetaDecks(sorted);
+          setMetaDecks(decksList);
           setTournamentName(tName);
         } else {
           throw new Error('Retornou status ' + res.status);
@@ -212,10 +203,8 @@ export default function Decks({ currentMember }: DecksProps) {
       }
     }
 
-    if (activeTab === 'meta') {
-      loadMetaDecks();
-    }
-  }, [activeTab]);
+    loadMetaDecks();
+  }, []);
 
   // Handle meta deck list copying to clipboard
   const handleCopyMetaList = (rawList: string, deckNameStr: string) => {
@@ -842,6 +831,29 @@ export default function Decks({ currentMember }: DecksProps) {
                   className="w-full p-2.5 bg-slate-950 border border-slate-850 focus:border-purple-500 rounded-lg text-white text-sm outline-none"
                   required
                 />
+              </div>
+
+              <div className="space-y-1.5 bg-purple-950/20 p-2.5 rounded-lg border border-purple-900/30">
+                <label className="block text-[10px] font-extrabold text-purple-300 uppercase tracking-wider">Preenchimento Rápido (Deck do Meta):</label>
+                <select
+                  id="import-deck-meta-quick-selector"
+                  onChange={(e) => {
+                    const val = e.target.value;
+                    const found = metaDecks.find(ma => ma.name === val);
+                    if (found) {
+                      const sprites = getArchetypeSprites(found.archetype);
+                      setDeckPokemon1(sprites[0] || 'substitute');
+                      setDeckPokemon2(sprites[1] || '');
+                      setDeckName(found.archetype);
+                    }
+                  }}
+                  className="w-full p-2 bg-slate-950 border border-slate-850 focus:border-purple-500 rounded-md text-white text-xs outline-none font-semibold"
+                >
+                  <option value="">-- Escolha um arquétipo para auto-completar --</option>
+                  {metaDecks.map(ma => (
+                    <option key={ma.name} value={ma.name}>{ma.name}</option>
+                  ))}
+                </select>
               </div>
 
               <div className="grid grid-cols-2 gap-3">

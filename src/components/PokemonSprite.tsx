@@ -35,6 +35,12 @@ export const getPokemonSpriteUrl = (pokemonName: string): string => {
   if (name === 'charizard') return 'https://play.pokemonshowdown.com/sprites/ani/charizard.gif';
   if (name === 'pidgeot') return 'https://play.pokemonshowdown.com/sprites/ani/pidgeot.gif';
   if (name === 'gengar-gmax') return 'https://play.pokemonshowdown.com/sprites/ani/gengar.gif';
+  if (name === 'terapagos') return 'https://play.pokemonshowdown.com/sprites/ani/terapagos.gif';
+  if (name === 'archaludon') return 'https://play.pokemonshowdown.com/sprites/ani/archaludon.gif';
+  if (name === 'ceruledge') return 'https://play.pokemonshowdown.com/sprites/ani/ceruledge.gif';
+  if (name === 'gouging-fire') return 'https://play.pokemonshowdown.com/sprites/ani/gougingfire.gif';
+  if (name === 'iron-hands') return 'https://play.pokemonshowdown.com/sprites/ani/ironhands.gif';
+  if (name === 'iron-crown') return 'https://play.pokemonshowdown.com/sprites/ani/ironcrown.gif';
 
   return `https://play.pokemonshowdown.com/sprites/ani/${name}.gif`;
 };

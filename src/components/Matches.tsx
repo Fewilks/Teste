@@ -76,16 +76,34 @@ export default function Matches({ currentMember }: MatchesProps) {
   const [notes, setNotes] = useState('');
   const [registering, setRegistering] = useState(false);
 
-  const archetypes = [
-    'Pikachu ex',
-    'Raging Bolt ex',
-    'Terapagos ex',
-    'Ceruledge ex',
-    'Dragapult ex',
-    'Archaludon ex',
-    'Roaring Moon ex',
-    'Outro'
-  ];
+  const [metaDecks, setMetaDecks] = useState<any[]>(() => [
+    { name: 'Pikachu ex', archetype: 'Pikachu ex / Latias ex', pokemon1: 'pikachu', pokemon2: 'latias' },
+    { name: 'Terapagos ex', archetype: 'Terapagos ex / Noctowl', pokemon1: 'terapagos', pokemon2: 'noctowl' },
+    { name: 'Ceruledge ex', archetype: 'Ceruledge ex / Dusknoir', pokemon1: 'ceruledge', pokemon2: 'dusknoir' },
+    { name: 'Archaludon ex', archetype: 'Archaludon ex / Metagross', pokemon1: 'archaludon', pokemon2: 'metagross' },
+    { name: 'Raging Bolt ex', archetype: 'Raging Bolt ex / Teal Mask Ogerpon', pokemon1: 'raging-bolt', pokemon2: 'teal-mask-ogerpon' },
+    { name: 'Dragapult ex', archetype: 'Dragapult ex / Noctowl', pokemon1: 'dragapult', pokemon2: 'noctowl' },
+    { name: 'Charizard ex', archetype: 'Charizard ex / Pidgeot ex', pokemon1: 'charizard', pokemon2: 'pidgeot' },
+    { name: 'Gouging Fire ex', archetype: 'Gouging Fire ex / Ogerpon', pokemon1: 'gouging-fire', pokemon2: 'teal-mask-ogerpon' },
+    { name: 'Future Hands', archetype: 'Future Hands (Iron Hands / Iron Crown)', pokemon1: 'iron-hands', pokemon2: 'iron-crown' }
+  ]);
+
+  useEffect(() => {
+    async function loadMetaDecks() {
+      try {
+        const res = await fetch('/api/pokemon/meta');
+        if (res.ok) {
+          const data = await res.json();
+          if (data.decks && data.decks.length > 0) {
+            setMetaDecks(data.decks);
+          }
+        }
+      } catch (err) {
+        console.error('Error loading meta decks for matches dropdown:', err);
+      }
+    }
+    loadMetaDecks();
+  }, []);
 
   useEffect(() => {
     async function loadMatches() {
@@ -673,6 +691,31 @@ export default function Matches({ currentMember }: MatchesProps) {
                   </select>
                 </div>
 
+                {(selectedDeckId === 'custom' || selectedDeckId === '') && (
+                  <div className="space-y-1.5 bg-purple-950/20 p-2.5 rounded-lg border border-purple-900/30">
+                    <label className="block text-[10px] font-extrabold text-purple-300 uppercase tracking-wider">Preenchimento Rápido (Deck do Meta):</label>
+                    <select
+                      id="p1-meta-quick-selector"
+                      onChange={(e) => {
+                        const val = e.target.value;
+                        const found = metaDecks.find(ma => ma.name === val);
+                        if (found) {
+                          const sprites = getArchetypeSprites(found.archetype || found.name);
+                          setDeckPokemon1(sprites[0] || 'substitute');
+                          setDeckPokemon2(sprites[1] || '');
+                          setDeckName(found.name || found.archetype);
+                        }
+                      }}
+                      className="w-full p-2 bg-slate-950 border border-slate-850 focus:border-purple-500 rounded-md text-white text-xs outline-none font-semibold"
+                    >
+                      <option value="">-- Escolha um arquétipo para auto-completar --</option>
+                      {metaDecks.map(ma => (
+                        <option key={ma.name} value={ma.name}>{ma.name}</option>
+                      ))}
+                    </select>
+                  </div>
+                )}
+
                 <div className="grid grid-cols-2 gap-3">
                   <div className="space-y-1.5">
                     <label className="block text-xs font-bold text-slate-300 uppercase">Pokémon Destaque 1 (Ícone):</label>
@@ -753,6 +796,29 @@ export default function Matches({ currentMember }: MatchesProps) {
               <div className="bg-slate-950/40 p-4 rounded-xl border border-slate-850 space-y-4">
                 <div className="flex items-center justify-between border-b border-slate-900 pb-2">
                   <span className="text-xs font-extrabold text-purple-400 uppercase tracking-wider">Deck do Oponente</span>
+                </div>
+
+                <div className="space-y-1.5 bg-purple-950/20 p-2.5 rounded-lg border border-purple-900/30">
+                  <label className="block text-[10px] font-extrabold text-purple-300 uppercase tracking-wider">Preenchimento Rápido (Deck do Meta):</label>
+                  <select
+                    id="p2-meta-quick-selector"
+                    onChange={(e) => {
+                      const val = e.target.value;
+                      const found = metaDecks.find(ma => ma.name === val);
+                      if (found) {
+                        const sprites = getArchetypeSprites(found.archetype || found.name);
+                        setOpponentPokemon1(sprites[0] || 'substitute');
+                        setOpponentPokemon2(sprites[1] || '');
+                        setOpponentDeck(found.name || found.archetype);
+                      }
+                    }}
+                    className="w-full p-2 bg-slate-950 border border-slate-850 focus:border-purple-500 rounded-md text-white text-xs outline-none font-semibold"
+                  >
+                    <option value="">-- Escolha um arquétipo para auto-completar --</option>
+                    {metaDecks.map(ma => (
+                      <option key={ma.name} value={ma.name}>{ma.name}</option>
+                    ))}
+                  </select>
                 </div>
 
                 <div className="grid grid-cols-2 gap-3">
