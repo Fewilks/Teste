@@ -308,7 +308,7 @@ app.get('/api/pokemon/meta', async (req, res) => {
     }
 
     // Map standings to frontend-compatible meta decks
-    const enrichedDecks = topDecks.map((d: any) => {
+    const enrichedDecks = topDecks.map((d: any, idx: number) => {
       // Find main pokemon to build high-quality image URL
       const mainPokemon = d.decklist.pokemon && d.decklist.pokemon.length > 0
         ? d.decklist.pokemon.find((p: any) => p.name.toLowerCase().includes((d.deck.name || '').toLowerCase())) || d.decklist.pokemon[0]
@@ -328,6 +328,8 @@ app.get('/api/pokemon/meta', async (req, res) => {
         ? d.decklist.pokemon.map((p: any) => ({ name: `${p.name} (${p.set} ${p.number})`, count: p.count }))
         : [{ name: deckName, count: 4 }];
 
+      const placingNum = Number(d.placing || d.position || d.rank || (idx + 1));
+
       // winrate based on record if available, else placement-based
       let winRate = 60.0;
       if (d.record && typeof d.record.wins === 'number') {
@@ -337,17 +339,29 @@ app.get('/api/pokemon/meta', async (req, res) => {
         }
       } else {
         const rates = [78.5, 72.4, 69.1, 66.8, 64.2, 62.5];
-        winRate = rates[d.placing - 1] || 60.0;
+        winRate = rates[placingNum - 1] || 60.0;
       }
 
+      let cleanedDate = new Date().toISOString().split('T')[0];
+      if (tournamentDate) {
+        try {
+          const parsedDate = new Date(tournamentDate);
+          if (!isNaN(parsedDate.getTime())) {
+            cleanedDate = parsedDate.toISOString().split('T')[0];
+          }
+        } catch (e) {}
+      }
+
+      const playerName = d.player || 'Jogador de Elite';
+
       return {
-        name: `${deckName} (${d.player})`,
+        name: `${deckName} (${playerName})`,
         archetype: deckName,
-        share: d.placing, // Use placing as share (under 8 is treated as placing)
+        share: placingNum, // Use placing as share (under 8 is treated as placing)
         winRate: parseFloat(winRate.toFixed(1)),
         imageUrl: imageUrl,
-        updatedAt: tournamentDate || new Date().toISOString().split('T')[0],
-        description: `Lista competitiva de elite utilizada pelo jogador ${d.player} para alcançar o ${d.placing}º lugar no torneio ${tournamentName}. Esta lista é 100% focada no bloco Standard H-on atual do Pokémon TCG.`,
+        updatedAt: cleanedDate,
+        description: `Lista competitiva de elite utilizada pelo jogador ${playerName} para alcançar o ${placingNum}º lugar no torneio ${tournamentName}. Esta lista é 100% focada no bloco Standard H-on atual do Pokémon TCG.`,
         cards: cards,
         rawList: rawList
       };

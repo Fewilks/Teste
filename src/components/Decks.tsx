@@ -284,7 +284,7 @@ export default function Decks({ currentMember }: DecksProps) {
           }
 
           // Mapeia para o formato esperado pelo frontend
-          const enrichedDecks = topDecks.map((d: any) => {
+          const enrichedDecks = topDecks.map((d: any, idx: number) => {
             const mainPokemon = d.decklist.pokemon && d.decklist.pokemon.length > 0
               ? d.decklist.pokemon.find((p: any) => p.name.toLowerCase().includes((d.deck.name || '').toLowerCase())) || d.decklist.pokemon[0]
               : null;
@@ -302,6 +302,8 @@ export default function Decks({ currentMember }: DecksProps) {
               ? d.decklist.pokemon.map((p: any) => ({ name: `${p.name} (${p.set} ${p.number})`, count: p.count }))
               : [{ name: deckName, count: 4 }];
 
+            const placingNum = Number(d.placing || d.position || d.rank || (idx + 1));
+
             let winRate = 60.0;
             if (d.record && typeof d.record.wins === 'number') {
               const total = d.record.wins + d.record.losses + (d.record.ties || 0);
@@ -310,17 +312,30 @@ export default function Decks({ currentMember }: DecksProps) {
               }
             } else {
               const rates = [78.5, 72.4, 69.1, 66.8, 64.2, 62.5];
-              winRate = rates[d.placing - 1] || 60.0;
+              winRate = rates[placingNum - 1] || 60.0;
             }
 
+            let cleanedDate = new Date().toISOString().split('T')[0];
+            const rawDate = tDate;
+            if (rawDate) {
+              try {
+                const parsedDate = new Date(rawDate);
+                if (!isNaN(parsedDate.getTime())) {
+                  cleanedDate = parsedDate.toISOString().split('T')[0];
+                }
+              } catch (e) {}
+            }
+
+            const playerName = d.player || 'Jogador de Elite';
+
             return {
-              name: `${deckName} (${d.player})`,
+              name: `${deckName} (${playerName})`,
               archetype: deckName,
-              share: d.placing, // sob 8 é tratado como colocação
+              share: placingNum, // sob 8 é tratado como colocação
               winRate: parseFloat(winRate.toFixed(1)),
               imageUrl: imageUrl,
-              updatedAt: tDate || new Date().toISOString().split('T')[0],
-              description: `Lista de elite utilizada pelo jogador ${d.player} para alcançar o ${d.placing}º lugar no torneio ${tName}.`,
+              updatedAt: cleanedDate,
+              description: `Lista de elite utilizada pelo jogador ${playerName} para alcançar o ${placingNum}º lugar no torneio ${tName}.`,
               cards: cards,
               rawList: rawList
             };
