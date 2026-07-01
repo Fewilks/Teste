@@ -91,6 +91,42 @@ export default function Matches({ currentMember }: MatchesProps) {
   useEffect(() => {
     async function loadMetaDecks() {
       try {
+        const isStaticHosting = window.location.hostname.includes('github.io') || 
+                                (!window.location.hostname.includes('localhost') && !window.location.hostname.includes('run.app'));
+        
+        if (isStaticHosting) {
+          const torResp = await fetch('https://play.limitlesstcg.com/api/tournaments?game=PTCG&format=STANDARD');
+          if (torResp.ok) {
+            const tournaments = await torResp.json();
+            const validTournaments = tournaments
+              .filter((t: any) => t.players >= 20)
+              .sort((a: any, b: any) => new Date(b.date).getTime() - new Date(a.date).getTime());
+
+            if (validTournaments.length > 0) {
+              for (const t of validTournaments.slice(0, 3)) {
+                const stdResp = await fetch(`https://play.limitlesstcg.com/api/tournaments/${t.id}/standings`);
+                if (stdResp.ok) {
+                  const standings = await stdResp.json();
+                  const standingsWithDecks = standings.filter((s: any) => s.decklist && (s.decklist.pokemon || s.decklist.trainer || s.decklist.energy));
+                  if (standingsWithDecks.length > 0) {
+                    const topDecks = standingsWithDecks.slice(0, 6);
+                    const enrichedDecks = topDecks.map((d: any) => {
+                      const deckName = d.deck.name || 'Deck';
+                      return {
+                        name: `${deckName} (${d.player})`,
+                        archetype: deckName
+                      };
+                    });
+                    setMetaDecks(enrichedDecks);
+                    break;
+                  }
+                }
+              }
+            }
+          }
+          return;
+        }
+
         const res = await fetch('/api/pokemon/meta');
         if (res.ok) {
           const data = await res.json();
